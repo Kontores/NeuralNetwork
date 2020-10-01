@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NeuralNetwork.Service
 {
-    public enum NeuronType
+    public enum LayerType
     {
         Input = 0,
         Hidden = 1,
