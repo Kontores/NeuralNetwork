@@ -8,23 +8,26 @@ namespace NeuralNetwork.Service
 {
     public class Layer
     {
+        private readonly IActivationFunction _activationFunction;
         public LayerType LayerType { get; }
         public Neuron[] Neurons { get; }
-
-        public Layer(LayerType layerType, int neuronsCount)
+        public Layer(LayerType layerType, IActivationFunction activationFunction, int neuronsCount)
         {
+            _activationFunction = activationFunction;
             LayerType = layerType;
             Neurons = new Neuron[neuronsCount];
-            IActivationFunction activationFunction;
-            if(LayerType == LayerType.Input)
+            Neurons.All(n => { n = new Neuron(); return true; });
+        }
+
+        public double[] FeedForward(double[] inputSignals)
+        {
+            var outputSignals = new double[Neurons.Length];
+            for(var i = 0; i < Neurons.Length; i++)
             {
-                activationFunction = new Linear();
+                outputSignals[i] = Neurons[i].Activate(_activationFunction, inputSignals);
             }
-            else
-            {
-                activationFunction = new Sigmoid();
-            }
-            Neurons.All(n => { n = new Neuron(activationFunction); return true; });
+
+            return outputSignals;
         }
     }
 }

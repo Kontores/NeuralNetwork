@@ -5,27 +5,22 @@ namespace NeuralNetwork.Service
 {
     public class Neuron
     {
-        private readonly IActivationFunction _activationFunction;
         public double[] Weights { get; set; }
-        public Neuron(IActivationFunction activationFunction)
+        public double Activate(IActivationFunction activationFunction, double[] inputSignals)
         {
-            _activationFunction = activationFunction;
-        }
-        public double Activate(double[] inputs)
-        {
-            if(inputs.Length != Weights.Length)
+            if(inputSignals.Length != Weights.Length)
             {
                 throw new Exception("Neuron weights number must be the same as input signals number passed to it");
             }
 
-            var totalSignal = default(double);
+            var outputSignal = default(double);
 
-            for(var i = 0; i < inputs.Length; i++)
+            for(var i = 0; i < inputSignals.Length; i++)
             {
-                totalSignal += inputs[i] * Weights[i];
+                outputSignal += inputSignals[i] * Weights[i];
             }
 
-            return _activationFunction.Activate(totalSignal);
+            return activationFunction.Activate(outputSignal);
         }
     }
 }
