@@ -10,5 +10,10 @@ namespace NeuralNetwork.Service.ActivationFunctions
         {
             return inputSignal;
         }
+
+        public double Derivative(double inputSignal)
+        {
+            return inputSignal;
+        }
     }
 }

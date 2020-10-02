@@ -10,5 +10,11 @@ namespace NeuralNetwork.Service.ActivationFunctions
         {
             return 1 / (1 + Math.Pow(Math.E, -inputSignal));
         }
+
+        public double Derivative(double inputSignal)
+        {
+            var sigmoid = Activate(inputSignal);
+            return sigmoid / (1 - sigmoid);
+        }
     }
 }
