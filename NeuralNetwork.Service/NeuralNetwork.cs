@@ -10,6 +10,7 @@ namespace NeuralNetwork.Service
     {
         public Layer[] Layers { get; }
         public double[] OutputSignals { get; set; }
+        public double LearningRate { get; set; }
 
         public NeuralNetwork(int inputNeurons, int[] hiddenNeurons, int outputNeurons, int inputsNeuronInputsCount, IActivationFunction activationFunction )
         {
