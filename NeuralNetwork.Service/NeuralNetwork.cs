@@ -9,7 +9,7 @@ namespace NeuralNetwork.Service
     public class NeuralNetwork
     {
         public Layer[] Layers { get; }
-        public double[] OutputSignals { get; set; }
+        public double[] OutputSignals { get; private set; }
         public double LearningRate { get; set; }
 
         public NeuralNetwork(int inputNeurons, int[] hiddenNeurons, int outputNeurons, int inputsNeuronInputsCount, IActivationFunction activationFunction )
@@ -34,6 +34,41 @@ namespace NeuralNetwork.Service
             {
                 OutputSignals = Layers[i].FeedForward(OutputSignals);
             }
+        }
+
+        private double[] Backpropagation(double[] expected, double[] inputSignals)
+        {
+            Run(inputSignals);
+
+            var error = new double[OutputSignals.Length];
+            for(var i = 0; i < error.Length; i++)
+            {
+                error[i] = OutputSignals[i] - expected[i];
+                Layers.Last().Neurons[i].Learn(error[i], LearningRate);
+            }
+            
+            for(var y = Layers.Length - 2; y > 0; y--)
+            {
+                var layer = Layers[y];
+                var forwardLayer = Layers[y + 1];
+
+                for(var i = 0; i < layer.Neurons.Length; i++)
+                {
+                    var neuron = layer.Neurons[i];                  
+                    for(var k = 0; k < forwardLayer.Neurons.Length; k++)
+                    {
+                        var forwardNeuron = forwardLayer.Neurons[k];
+                        var neuronError = forwardNeuron.Weights[i] * forwardNeuron.Delta;
+                        neuron.Learn(neuronError, LearningRate);
+                    }                    
+                }
+            }
+
+
+            // returning square of error
+            var result = new double[error.Length];
+            result.All(r => { r *= r; return true; });
+            return result;
         }
 
         private Layer CreateLayer(LayerType layerType, int neuronsCount, int inputsPerNeuron, IActivationFunction activationFunction)
