@@ -78,6 +78,11 @@ namespace NeuralNetwork.Service
 
         private void RandomizeWeights(Layer[] layers)
         {
+            // setting 1 weight value for input layer neurons
+            var inputWeights = new double[Layers[1].Neurons.Length];
+            inputWeights.All(w => { w = 1; return true; });
+            Layers.First().Neurons.All(n => { n.SetWeights(inputWeights); return true; });
+
             var random = new Random();
 
             for(var i = 1; i < layers.Length; i++)
