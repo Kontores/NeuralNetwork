@@ -5,7 +5,15 @@ namespace NeuralNetwork.Service
 {
     public class Neuron
     {
-        public double[] Weights { get; set; }
+        public double[] Weights { get; private set; }
+        public double[] InputSignals { get; private set; }
+
+        public Neuron(int inputsCount)
+        {
+            Weights = new double[inputsCount];
+            InputSignals = new double[inputsCount];
+        }
+
         public double Activate(IActivationFunction activationFunction, double[] inputSignals)
         {
             if(inputSignals.Length != Weights.Length)
@@ -21,6 +29,14 @@ namespace NeuralNetwork.Service
             }
 
             return activationFunction.Activate(outputSignal);
+        }
+
+        public void SetWeights(double[] weights)
+        {
+            for(var i = 0; i < Weights.Length; i++)
+            {
+                Weights[i] = weights[i];
+            }
         }
     }
 }
